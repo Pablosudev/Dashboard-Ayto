@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   AllNewsInterface,
-  NewInputInterface,
   NewsFormInput,
   NewsInterface,
 } from "../Interfaces/newsInterface";
@@ -46,7 +45,7 @@ export const getNewsByIdThunk = createAsyncThunk<
   }
 });
 
-export const createNews = createAsyncThunk<
+export const createNewsThunk = createAsyncThunk<
   NewsInterface,
   NewsFormInput,
   { rejectValue: string }
@@ -75,7 +74,7 @@ export const createNews = createAsyncThunk<
   }
 });
 
-export const updateNewThunk = createAsyncThunk<
+export const updateNewsThunk = createAsyncThunk<
   NewsInterface,
   { id: number; newFormInput: NewsFormInput },
   { rejectValue: string }
@@ -114,7 +113,7 @@ export const updateNewThunk = createAsyncThunk<
   },
 );
 
-export const deleteNewThunk = createAsyncThunk<
+export const deleteNewsThunk = createAsyncThunk<
 number,
 number,
 {rejectValue: string}
