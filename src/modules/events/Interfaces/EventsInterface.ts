@@ -20,14 +20,16 @@ export type EventFormInput = Omit<EventInterface, 'id' | 'creationDate' | 'image
 
 
 export interface EventStatus {
+  events: AllEventsInterface;
+  eventById: EventInterface | null;
   getEventsStatus: RequestEventStatus;
-  getEventError: string | null;
+  getEventError: string | undefined;
   getEventByIdStatus: RequestEventStatus;
-  getEventByIdError: string | null;
+  getEventByIdError: string | undefined;
   createEventStatus: RequestEventStatus;
-  createEventError: string | null;
+  createEventError: string | undefined;
   updateEventStatus: RequestEventStatus;
-  updateEventError: string | null;
+  updateEventError: string | undefined;
   deleteEventStatus: RequestEventStatus;
-  deleteEventError: string | null;
+  deleteEventError: string | undefined;
 }

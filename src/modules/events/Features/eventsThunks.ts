@@ -3,14 +3,13 @@ import {
   AllEventsInterface,
   EventInterface,
   EventFormInput,
-  EventInput,
 } from "../Interfaces/EventsInterface";
 
 export const getEventsThunk = createAsyncThunk<
   AllEventsInterface,
   void,
   { rejectValue: string }
->("/events", async (events: void, thunkAPI) => {
+>("events/getAll", async (_events: void, thunkAPI) => {
   try {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/events`);
     if (!response.ok) {
@@ -30,7 +29,7 @@ export const getEventByIdThunk = createAsyncThunk<
   EventInterface,
   number,
   { rejectValue: string }
->("/events", async (id: number, thunkAPI) => {
+>("events/getById", async (id: number, thunkAPI) => {
   try {
     const response = await fetch(
       `${import.meta.env.VITE_API_URL}/events/${id}`,
@@ -49,10 +48,10 @@ export const getEventByIdThunk = createAsyncThunk<
 });
 
 export const createEventThunk = createAsyncThunk<
+  EventInterface,
   EventFormInput,
-  EventInput,
   { rejectValue: string }
->("/events", async (eventInput: EventInput, thunkAPI) => {
+>("events/create", async (eventInput: EventFormInput, thunkAPI) => {
   try {
     const formData = new FormData();
     formData.append("title", eventInput.title);
@@ -74,21 +73,21 @@ export const createEventThunk = createAsyncThunk<
         errorCreateEvent.error ?? "Error al crear el evento",
       );
     }
-    const data: EventFormInput = await response.json();
+    const data: EventInterface = await response.json();
     return data;
   } catch (error) {
     return thunkAPI.rejectWithValue("Error al crear el evento");
   }
 });
 
-const updateEventThunk = createAsyncThunk<
-  EventFormInput,
-  { id: number; eventInput: EventInput },
+export const updateEventThunk = createAsyncThunk<
+  EventInterface,
+  { id: number; eventInput: EventFormInput },
   { rejectValue: string }
 >(
-  "/event",
+  "events/update",
   async (
-    { id, eventInput }: { id: number; eventInput: EventInput },
+    { id, eventInput }: { id: number; eventInput: EventFormInput },
     thunkAPI,
   ) => {
     try {
@@ -101,7 +100,7 @@ const updateEventThunk = createAsyncThunk<
         formData.append("image", eventInput.image);
       }
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/events`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/events/${id}`, {
         method: "PUT",
         body: formData,
       });
@@ -111,7 +110,7 @@ const updateEventThunk = createAsyncThunk<
           errorUpdateEvent.error ?? "Error al actualizar el evento",
         );
       }
-      const data : EventFormInput = await response.json();
+      const data : EventInterface = await response.json();
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue("Error al actualizar el evento");
@@ -124,7 +123,7 @@ export const deleteEventThunk = createAsyncThunk<
   number,
   number,
   {rejectValue: string}
-  >("delete" , async (id:number , thunkAPI) => {
+  >("events/delete" , async (id:number , thunkAPI) => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/events/${id}`, {
         method: "DELETE",
